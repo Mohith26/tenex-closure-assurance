@@ -298,7 +298,7 @@ function openSheet(r) {
     body.innerHTML = `<div class="facts"><div class="fact"><div class="f-l">Auto-closed · escalated</div><div class="f-v">${fmt(r.closed)} · ${fmt(r.escalated)}</div></div><div class="fact"><div class="f-l">Threats in closed (90%)</div><div class="f-v">${r.missed.point.toFixed(1)} <span class="ci">${r.missed.lo.toFixed(1)}–${r.missed.hi.toFixed(1)}</span></div></div><div class="fact"><div class="f-l">Threat odds vs agent</div><div class="f-v">×${r.oddsRatio.toFixed(2)} <span class="ci">±${(r.fit.se).toFixed(2)} logit</span></div></div></div>
       <div id="thrChart" class="chart"></div>
       <p class="sheet-note">${lines[th.action] || ''} Miss rates here carry the uncertainty in the rule's calibration (500 draws); expected counts exclude which individual alerts turn out to be real.</p>
-      <table class="tbl small"><thead><tr><th>Threshold</th><th class="num">Escalations / mo</th><th class="num">Expected missed</th><th class="num">Miss rate, median</th><th class="num">Miss rate, p95</th></tr></thead><tbody>
+      <table class="tbl small"><thead><tr><th>Threshold</th><th class="num">Escalations / mo</th><th class="num">Exp. missed</th><th class="num">Miss rate</th><th class="num">p95</th></tr></thead><tbody>
       ${th.rows.map((x) => `<tr class="${x === cur ? 'cur' : ''} ${rec && x === rec && x !== cur ? 'rec' : ''}"><td class="mono">${x.t}${x === cur ? ' <span class="dim">current</span>' : ''}${rec && x === rec && x !== cur ? ' <span style="color:var(--green-t)">recommended</span>' : ''}</td><td class="num mono">${fmt(x.escalations)}</td><td class="num mono">${x.missedMed.toFixed(1)}</td><td class="num mono">${pct(x.fnrMed)}</td><td class="num mono">${pct(x.fnr95)}</td></tr>`).join('')}
       </tbody></table>`;
     drawThreshold(r);
@@ -309,7 +309,7 @@ function openSheet(r) {
 }
 function closeSheet() { $('#sheet').classList.remove('open'); $('#scrim').classList.remove('open'); $('#sheet').setAttribute('aria-hidden', 'true'); history.replaceState(null, '', location.pathname); }
 function drawThreshold(r) {
-  const rows = r.threshold.rows, W = 520, H = 220, l = 44, rt = 44, t = 12, b = 34;
+  const rows = r.threshold.rows, W = 580, H = 220, l = 44, rt = 44, t = 12, b = 34;
   const n = rows.length, X = (j) => l + (W - l - rt) * j / (n - 1);
   const ymax = niceMax(Math.max(AN.alpha * 1.6, ...rows.map((x) => x.fnr95)) * 1.05), Y = (v) => H - b - (H - b - t) * v / ymax;
   const emax = niceMax(Math.max(...rows.map((x) => x.escalations))), E = (v) => H - b - (H - b - t) * v / emax;
