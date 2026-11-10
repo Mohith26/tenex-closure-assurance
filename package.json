@@ -1,0 +1,1 @@
+{ "name": "tenex-closure-assurance", "private": true, "type": "module", "scripts": { "test": "node --test test/assurance.test.mjs", "data": "node scripts/generate.mjs && node scripts/simcheck.mjs 200" } }

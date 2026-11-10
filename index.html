@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Closure Assurance · TENEX.AI (concept demo)</title>
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sb-head">
+      <img class="logo" src="assets/tenex-logo.png" alt="TENEX.AI">
+    </div>
+    <button class="tenant-switch" type="button">
+      <span class="tenant-avatar">HF</span>
+      <span class="tenant-meta"><span class="tenant-name">Halvorsen Freight</span><span class="tenant-sub">Google SecOps · Agentic MDR</span></span>
+      <i data-lucide="chevrons-up-down"></i>
+    </button>
+    <nav class="sb-nav">
+      <div class="sb-group">
+        <a class="sb-item"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></a>
+        <a class="sb-item"><i data-lucide="briefcase"></i><span>Cases</span></a>
+        <a class="sb-item active"><i data-lucide="shield-check"></i><span>Closure Assurance</span><span class="sb-new">New</span></a>
+        <a class="sb-item"><i data-lucide="crosshair"></i><span>Threat Hunting</span></a>
+        <a class="sb-item"><i data-lucide="radar"></i><span>Threat Intelligence</span></a>
+      </div>
+      <div class="sb-label">Detection</div>
+      <div class="sb-group">
+        <a class="sb-item"><i data-lucide="file-code-2"></i><span>Rules</span></a>
+        <a class="sb-item"><i data-lucide="book-open-text"></i><span>PromptBooks</span></a>
+        <a class="sb-item"><i data-lucide="boxes"></i><span>Entities</span></a>
+      </div>
+      <div class="sb-label">Workspace</div>
+      <div class="sb-group">
+        <a class="sb-item"><i data-lucide="file-bar-chart-2"></i><span>Reports</span></a>
+        <a class="sb-item"><i data-lucide="plug"></i><span>Integrations</span></a>
+        <a class="sb-item"><i data-lucide="settings"></i><span>Settings</span></a>
+      </div>
+    </nav>
+    <div class="sb-foot">
+      <a class="sb-item"><i data-lucide="life-buoy"></i><span>Support</span></a>
+      <div class="sb-user"><span class="u-avatar">MR</span><span class="u-meta"><span class="u-name">Maya Ruiz</span><span class="u-role">Customer Admin</span></span><i data-lucide="ellipsis"></i></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="icon-btn" type="button" aria-label="Toggle sidebar"><i data-lucide="panel-left"></i></button>
+      <div class="sep-v"></div>
+      <nav class="crumbs"><span>Halvorsen Freight</span><i data-lucide="chevron-right"></i><span class="cur">Closure Assurance</span></nav>
+      <div class="topbar-right">
+        <button class="search" type="button"><i data-lucide="search"></i><span>Search cases, alerts, entities…</span><kbd>⌘K</kbd></button>
+        <button class="icon-btn" type="button" aria-label="Notifications"><i data-lucide="bell"></i></button>
+      </div>
+    </header>
+
+    <div class="page" id="page">
+      <section class="page-head">
+        <div>
+          <div class="title-row"><h1>Closure Assurance</h1><span class="pill-new">Preview</span></div>
+          <p class="sub">How many real threats are inside the alerts our agents auto-closed, how sure we are, and which closures an analyst should re-open next.</p>
+        </div>
+        <div class="head-actions">
+          <button class="btn outline" type="button"><i data-lucide="calendar"></i><span id="periodLabel"></span></button>
+          <div class="select-wrap"><label for="alphaSel">Target recall per rule</label>
+            <select id="alphaSel"><option value="0.10" selected>≥ 90%</option><option value="0.05">≥ 95%</option><option value="0.15">≥ 85%</option></select></div>
+          <button class="btn outline" type="button" id="exportBtn"><i data-lucide="download"></i><span>Export</span></button>
+        </div>
+      </section>
+
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-target="sec-overview">Overview</button>
+        <button class="tab" data-target="sec-rules">Rules</button>
+        <button class="tab" data-target="sec-plan">Review plan</button>
+        <button class="tab" data-target="sec-method">Method</button>
+      </div>
+
+      <div id="loading" class="loading"><i data-lucide="loader-circle" class="spin"></i> Recalibrating agent confidence across 42k alerts…</div>
+
+      <section id="sec-overview" class="hidden-until-ready">
+        <div class="kpis" id="kpis"></div>
+        <div class="grid-2-1">
+          <div class="card">
+            <div class="card-h"><div><h3>Estimated threats inside auto-closed alerts, by rule</h3><p class="card-sub" id="forestSub"></p></div>
+              <div class="legend"><span><i class="lg-dot agent"></i>Agent's own estimate</span><span><i class="lg-bar"></i>Recalibrated, 90% interval</span></div></div>
+            <div id="forest" class="chart"></div>
+          </div>
+          <div class="card">
+            <div class="card-h"><div><h3>What each method can say</h3><p class="card-sub">Threats missed this period, 90% interval</p></div></div>
+            <div id="methods" class="chart"></div>
+            <div class="note" id="methodsNote"></div>
+            <div class="bands"><div class="bands-h">Where the missed threats sit, by agent FP confidence</div><div id="bands"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sec-rules" class="card hidden-until-ready">
+        <div class="card-h"><div><h3>Rules</h3><p class="card-sub" id="rulesSub"></p></div>
+          <div class="filters"><div class="input-wrap"><i data-lucide="search"></i><input id="ruleSearch" placeholder="Filter rules"></div>
+          <div class="seg" id="actionSeg"><button data-f="all" class="on">All</button><button data-f="tighten">Tighten</button><button data-f="loosen">Automate more</button><button data-f="keep">Keep</button></div></div></div>
+        <div class="table-wrap"><table class="tbl" id="rulesTbl"><thead></thead><tbody></tbody></table></div>
+      </section>
+
+      <section id="sec-plan" class="grid-2-1 hidden-until-ready">
+        <div class="card">
+          <div class="card-h"><div><h3>Closure review plan</h3><p class="card-sub">Same analyst budget, chosen by risk instead of at random</p></div></div>
+          <div class="plan-controls">
+            <div class="ctl"><label>Reviews per day <b id="budgetVal"></b></label><input type="range" id="budget" min="10" max="120" step="1"></div>
+            <div class="ctl"><label>Re-open the riskiest <b id="takeVal"></b> per day, sample the rest</label><input type="range" id="take" min="0" max="40" step="1"></div>
+          </div>
+          <div class="plan-body">
+            <div id="frontier" class="chart"></div>
+            <div class="plan-stats" id="planStats"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-h"><div><h3>Today's review queue</h3><p class="card-sub" id="queueSub"></p></div></div>
+          <div id="queue" class="queue"></div>
+        </div>
+      </section>
+
+      <section id="sec-method" class="grid-1-1 hidden-until-ready">
+        <div class="card">
+          <div class="card-h"><div><h3>How the estimate is computed</h3></div></div>
+          <ol class="method" id="methodList"></ol>
+        </div>
+        <div class="card">
+          <div class="card-h"><div><h3>Simulation check</h3><p class="card-sub" id="simSub"></p></div></div>
+          <div id="sim"></div>
+        </div>
+      </section>
+
+      <footer class="foot">Unofficial concept demo by Mohith Gajjela. Not affiliated with TENEX.AI. Synthetic data.</footer>
+    </div>
+  </main>
+
+  <aside class="sheet" id="sheet" aria-hidden="true">
+    <div class="sheet-h"><div><div class="sheet-kicker">Auto-close threshold what-if</div><h3 id="sheetTitle"></h3></div><button class="icon-btn" id="sheetClose" aria-label="Close the details panel"><i data-lucide="x"></i></button></div>
+    <div class="sheet-body" id="sheetBody"></div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+  <div class="tooltip" id="tip"></div>
+</div>
+<script type="module" src="app.js"></script>
+</body>
+</html>

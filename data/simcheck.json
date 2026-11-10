@@ -1,0 +1,41 @@
+{
+ "generated": "2026-11-10",
+ "budget": 1260,
+ "takeAll": 240,
+ "conf": 0.9,
+ "scenarios": [
+  {
+   "scenario": "well-specified",
+   "reps": 200,
+   "modelCoverageTotal": 0.85,
+   "modelCoveragePerRule": 0.9220588235294118,
+   "ppiCoverageUniform": 1,
+   "ppiCoverageTargeted": 1,
+   "classicCoverage": 1,
+   "meanWidthModel": 13.601325767186465,
+   "meanWidthPPI": 63.74096894844627,
+   "meanClassicUpper": 129.5668285631126,
+   "foundPerMonthUniform": 0.4,
+   "foundPerMonthTargeted": 5.995,
+   "checkPowerUniform": 0.005,
+   "checkPowerTargeted": 0.035
+  },
+  {
+   "scenario": "confidence-dependent drift",
+   "reps": 200,
+   "modelCoverageTotal": 0.015,
+   "modelCoveragePerRule": 0.6441176470588236,
+   "ppiCoverageUniform": 0.835,
+   "ppiCoverageTargeted": 0.72,
+   "classicCoverage": 1,
+   "meanWidthModel": 13.601325767186465,
+   "meanWidthPPI": 99.14657557532715,
+   "meanClassicUpper": 167.39256991513543,
+   "foundPerMonthUniform": 1.225,
+   "foundPerMonthTargeted": 6.74,
+   "checkPowerUniform": 0.13,
+   "checkPowerTargeted": 0.07
+  }
+ ],
+ "seconds": 16.508
+}
